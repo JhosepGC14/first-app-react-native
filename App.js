@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Text, StyleSheet, View, FlatList, SafeAreaView, StatusBar } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Cita from './components/Cita';
+import NewCita from "./components/NewCita"
 
 const App = () => {
 
@@ -38,6 +39,12 @@ const App = () => {
     },
   ]);
 
+  const deletePatient = (id) => {
+    setCitas((currentCitas) => {
+      return currentCitas.filter((cita) => cita.id !== id);
+    })
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <LinearGradient
@@ -51,10 +58,16 @@ const App = () => {
           backgroundColor="transparent" />
         <Text style={styles.titulo}>Atenea's Hospital</Text>
         <View style={styles.secondBox}>
+          <NewCita />
+          <Text style={styles.subtitle}>
+            {
+              citas.length === 0 ? 'No tienes citas reservadas' : 'Tus Citas:'
+            }</Text>
+
           <FlatList
             showsVerticalScrollIndicator={false}
             data={citas}
-            renderItem={({ item }) => <Cita cita={item} />}
+            renderItem={({ item }) => <Cita cita={item} deletePatient={deletePatient} />}
             keyExtractor={(item) => item.id}
           />
         </View>
@@ -79,13 +92,21 @@ const styles = StyleSheet.create({
   secondBox: {
     flex: 1,
     backgroundColor: '#fff',
-    borderTopLeftRadius: 35,
-    borderTopRightRadius: 35,
+    borderTopLeftRadius: 25,
+    borderTopRightRadius: 25,
     minWidth: '100%',
     paddingTop: 20,
     paddingLeft: 20,
     paddingRight: 20,
   },
+
+  subtitle: {
+    textAlign: 'center',
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 30,
+    color: '#2F3A7D',
+  }
 });
 
 export default App;
